@@ -75,6 +75,9 @@ export declare class MvcValidationProviders {
  * Responsibles for managing the DOM elements and running the validation providers.
  */
 export declare class ValidationService {
+    constructor({ handleSubmit }: {
+        handleSubmit: any;
+    });
     /**
      * A key-value collection of loaded validation plugins.
      */
@@ -115,6 +118,10 @@ export declare class ValidationService {
      * In milliseconds, the rate of fire of the input validation.
      */
     debounce: number;
+    /**
+     * Should Asp-Net trigger a submit if Validation is successful?
+     */
+    private handleSubmit;
     /**
      * Registers a new validation plugin of the given name, if not registered yet.
      * Registered plugin validates inputs with data-val-[name] attribute, used as error message.

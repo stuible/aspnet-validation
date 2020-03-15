@@ -376,6 +376,9 @@ export class MvcValidationProviders {
  * Responsibles for managing the DOM elements and running the validation providers.
  */
 export class ValidationService {
+    constructor({handleSubmit}) {
+        this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
+      }
     /**
      * A key-value collection of loaded validation plugins. 
      */
@@ -425,6 +428,11 @@ export class ValidationService {
      * In milliseconds, the rate of fire of the input validation.
      */
     debounce = 300;
+
+    /**
+     * Should Asp-Net trigger a submit if Validation is successful?
+     */
+    private handleSubmit: true;
 
     /**
      * Registers a new validation plugin of the given name, if not registered yet.
@@ -624,7 +632,7 @@ export class ValidationService {
             });
         };
 
-        form.addEventListener('submit', cb);
+        if(this.handleSubmit) form.addEventListener('submit', cb);
         form.addEventListener('reset', e => {
             let uids = this.formInputs[formUID];
 

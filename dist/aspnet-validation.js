@@ -108,10 +108,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MvcValidationProviders", function() { return MvcValidationProviders; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ValidationService", function() { return ValidationService; });
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -427,7 +428,8 @@ var MvcValidationProviders = /** @class */ (function () {
  * Responsibles for managing the DOM elements and running the validation providers.
  */
 var ValidationService = /** @class */ (function () {
-    function ValidationService() {
+    function ValidationService(_a) {
+        var handleSubmit = _a.handleSubmit;
         /**
          * A key-value collection of loaded validation plugins.
          */
@@ -464,6 +466,7 @@ var ValidationService = /** @class */ (function () {
          * In milliseconds, the rate of fire of the input validation.
          */
         this.debounce = 300;
+        this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
     }
     /**
      * Registers a new validation plugin of the given name, if not registered yet.
@@ -639,7 +642,8 @@ var ValidationService = /** @class */ (function () {
                 console.log(error);
             });
         };
-        form.addEventListener('submit', cb);
+        if (this.handleSubmit)
+            form.addEventListener('submit', cb);
         form.addEventListener('reset', function (e) {
             var uids = _this.formInputs[formUID];
             for (var _i = 0, uids_1 = uids; _i < uids_1.length; _i++) {
