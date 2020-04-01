@@ -429,7 +429,6 @@ var MvcValidationProviders = /** @class */ (function () {
  */
 var ValidationService = /** @class */ (function () {
     function ValidationService(_a) {
-        var _this = this;
         var handleSubmit = _a.handleSubmit;
         /**
          * A key-value collection of loaded validation plugins.
@@ -471,9 +470,9 @@ var ValidationService = /** @class */ (function () {
         //Only handles one summary element for now
         var summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
         if (summaryElements.length) {
-            summaryElements.forEach(function (value, key) {
-                _this.validationSummaryMessages[key] = value.innerHTML;
-            });
+            for (var i = 0; i < summaryElements.length; i++) {
+                this.validationSummaryMessages[i] = summaryElements[i].innerHTML;
+            }
         }
     }
     /**

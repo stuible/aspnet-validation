@@ -382,9 +382,9 @@ export class ValidationService {
         //Only handles one summary element for now
         let summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
         if (summaryElements.length) {
-            summaryElements.forEach((value, key) => {
-                this.validationSummaryMessages[key] = value.innerHTML
-            })
+            for (let i = 0; i < summaryElements.length; i++) {
+                this.validationSummaryMessages[i] = summaryElements[i].innerHTML
+            }
         }
 
       }
