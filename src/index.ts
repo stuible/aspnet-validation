@@ -378,6 +378,15 @@ export class MvcValidationProviders {
 export class ValidationService {
     constructor({handleSubmit}) {
         this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
+        
+        //Only handles one summary element for now
+        let summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
+        if (summaryElements.length) {
+            summaryElements.forEach((value, key) => {
+                this.validationSummaryMessages[key] = value.innerHTML
+            })
+        }
+
       }
     /**
      * A key-value collection of loaded validation plugins. 
@@ -433,6 +442,11 @@ export class ValidationService {
      * Should Asp-Net trigger a submit if Validation is successful?
      */
     private handleSubmit: true;
+
+    /**
+     * Contents of Validation Summary Div on Init
+     */
+    private validationSummaryMessages: Array<string>;
 
     /**
      * Registers a new validation plugin of the given name, if not registered yet.
@@ -743,7 +757,7 @@ export class ValidationService {
 
         for (let i = 0; i < summaryElements.length; i++) {
             let e = summaryElements[i];
-            e.innerHTML = '';
+            e.innerHTML = this.validationSummaryMessages[i];
             if (ul) {
                 e.className = 'validation-summary-errors';
                 e.appendChild(ul.cloneNode(true));

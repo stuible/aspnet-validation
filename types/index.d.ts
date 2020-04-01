@@ -123,6 +123,10 @@ export declare class ValidationService {
      */
     private handleSubmit;
     /**
+     * Contents of Validation Summary Div on Init
+     */
+    private validationSummaryMessages;
+    /**
      * Registers a new validation plugin of the given name, if not registered yet.
      * Registered plugin validates inputs with data-val-[name] attribute, used as error message.
      * @param name

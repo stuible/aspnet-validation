@@ -429,6 +429,7 @@ var MvcValidationProviders = /** @class */ (function () {
  */
 var ValidationService = /** @class */ (function () {
     function ValidationService(_a) {
+        var _this = this;
         var handleSubmit = _a.handleSubmit;
         /**
          * A key-value collection of loaded validation plugins.
@@ -467,6 +468,13 @@ var ValidationService = /** @class */ (function () {
          */
         this.debounce = 300;
         this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
+        //Only handles one summary element for now
+        var summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
+        if (summaryElements.length) {
+            summaryElements.forEach(function (value, key) {
+                _this.validationSummaryMessages[key] = value.innerHTML;
+            });
+        }
     }
     /**
      * Registers a new validation plugin of the given name, if not registered yet.
@@ -739,7 +747,7 @@ var ValidationService = /** @class */ (function () {
         var ul = this.createSummaryDOM();
         for (var i = 0; i < summaryElements.length; i++) {
             var e = summaryElements[i];
-            e.innerHTML = '';
+            e.innerHTML = this.validationSummaryMessages[i];
             if (ul) {
                 e.className = 'validation-summary-errors';
                 e.appendChild(ul.cloneNode(true));
