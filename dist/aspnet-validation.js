@@ -752,11 +752,11 @@ var ValidationService = /** @class */ (function () {
             var e = summaryElements[i];
             e.innerHTML = this.validationSummaryMessages[i];
             if (ul) {
-                e.className = 'validation-summary-errors';
+                e.className = 'validation-summary validation-summary-errors';
                 e.appendChild(ul.cloneNode(true));
             }
             else {
-                e.className = 'validation-summary-valid';
+                e.className = 'validation-summary validation-summary-valid';
             }
         }
     };
