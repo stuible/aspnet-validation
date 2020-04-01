@@ -446,7 +446,7 @@ export class ValidationService {
     /**
      * Contents of Validation Summary Div on Init
      */
-    private validationSummaryMessages: Array<string>;
+    private validationSummaryMessages: Array<string> = [];
 
     /**
      * Registers a new validation plugin of the given name, if not registered yet.

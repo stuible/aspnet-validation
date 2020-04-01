@@ -466,6 +466,10 @@ var ValidationService = /** @class */ (function () {
          * In milliseconds, the rate of fire of the input validation.
          */
         this.debounce = 300;
+        /**
+         * Contents of Validation Summary Div on Init
+         */
+        this.validationSummaryMessages = [];
         this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
         //Only handles one summary element for now
         var summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
