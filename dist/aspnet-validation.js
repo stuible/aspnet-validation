@@ -429,7 +429,7 @@ var MvcValidationProviders = /** @class */ (function () {
  */
 var ValidationService = /** @class */ (function () {
     function ValidationService(_a) {
-        var handleSubmit = _a.handleSubmit;
+        var handleSubmit = _a.handleSubmit, hideContainer = _a.hideContainer;
         /**
          * A key-value collection of loaded validation plugins.
          */
@@ -467,10 +467,15 @@ var ValidationService = /** @class */ (function () {
          */
         this.debounce = 300;
         /**
+        * Should Asp-Net trigger a submit if Validation is successful?
+        */
+        this.hideContainer = undefined;
+        /**
          * Contents of Validation Summary Div on Init
          */
         this.validationSummaryMessages = [];
         this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
+        this.hideContainer = hideContainer ? hideContainer : this.hideContainer;
         //Only handles one summary element for now
         var summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
         if (summaryElements.length) {
@@ -736,6 +741,7 @@ var ValidationService = /** @class */ (function () {
      */
     ValidationService.prototype.renderSummary = function () {
         var summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
+        var summaryContainer = document.getElementById(this.hideContainer);
         if (!summaryElements.length) {
             return;
         }
@@ -753,10 +759,14 @@ var ValidationService = /** @class */ (function () {
             e.innerHTML = this.validationSummaryMessages[i];
             if (ul) {
                 e.className = 'validation-summary validation-summary-errors';
+                if (summaryContainer)
+                    summaryContainer.classList.remove("hidden");
                 e.appendChild(ul.cloneNode(true));
             }
             else {
                 e.className = 'validation-summary validation-summary-valid';
+                if (summaryContainer)
+                    summaryContainer.classList.add("hidden");
             }
         }
     };

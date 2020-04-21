@@ -75,8 +75,9 @@ export declare class MvcValidationProviders {
  * Responsibles for managing the DOM elements and running the validation providers.
  */
 export declare class ValidationService {
-    constructor({ handleSubmit }: {
+    constructor({ handleSubmit, hideContainer }: {
         handleSubmit: any;
+        hideContainer: any;
     });
     /**
      * A key-value collection of loaded validation plugins.
@@ -122,6 +123,10 @@ export declare class ValidationService {
      * Should Asp-Net trigger a submit if Validation is successful?
      */
     private handleSubmit;
+    /**
+    * Should Asp-Net trigger a submit if Validation is successful?
+    */
+    private hideContainer;
     /**
      * Contents of Validation Summary Div on Init
      */

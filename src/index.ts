@@ -376,8 +376,9 @@ export class MvcValidationProviders {
  * Responsibles for managing the DOM elements and running the validation providers.
  */
 export class ValidationService {
-    constructor({handleSubmit}) {
+    constructor({handleSubmit, hideContainer}) {
         this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
+        this.hideContainer = hideContainer ? hideContainer : this.hideContainer;
         
         //Only handles one summary element for now
         let summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
@@ -442,6 +443,11 @@ export class ValidationService {
      * Should Asp-Net trigger a submit if Validation is successful?
      */
     private handleSubmit: true;
+
+     /**
+     * Should Asp-Net trigger a submit if Validation is successful?
+     */
+    private hideContainer: string = undefined;
 
     /**
      * Contents of Validation Summary Div on Init
@@ -740,6 +746,7 @@ export class ValidationService {
      */
     private renderSummary() {
         let summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
+        let summaryContainer = document.getElementById(this.hideContainer);
         if (!summaryElements.length) {
             return;
         }
@@ -760,9 +767,11 @@ export class ValidationService {
             e.innerHTML = this.validationSummaryMessages[i];
             if (ul) {
                 e.className = 'validation-summary validation-summary-errors';
+                if(summaryContainer)summaryContainer.classList.remove("hidden");
                 e.appendChild(ul.cloneNode(true));
             } else {
                 e.className = 'validation-summary validation-summary-valid';
+                if(summaryContainer)summaryContainer.classList.add("hidden");
             }
         }
     }
