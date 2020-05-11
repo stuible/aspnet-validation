@@ -376,10 +376,10 @@ export class MvcValidationProviders {
  * Responsibles for managing the DOM elements and running the validation providers.
  */
 export class ValidationService {
-    constructor({handleSubmit, hideContainer}) {
+    constructor({ handleSubmit, hideContainer }) {
         this.handleSubmit = handleSubmit ? handleSubmit : this.handleSubmit;
         this.hideContainer = hideContainer ? hideContainer : this.hideContainer;
-        
+
         //Only handles one summary element for now
         let summaryElements = document.querySelectorAll('[data-valmsg-summary="true"]');
         if (summaryElements.length) {
@@ -388,7 +388,7 @@ export class ValidationService {
             }
         }
 
-      }
+    }
     /**
      * A key-value collection of loaded validation plugins. 
      */
@@ -444,9 +444,9 @@ export class ValidationService {
      */
     private handleSubmit: true;
 
-     /**
-     * Should Asp-Net trigger a submit if Validation is successful?
-     */
+    /**
+    * Should Asp-Net trigger a submit if Validation is successful?
+    */
     private hideContainer: string = undefined;
 
     /**
@@ -652,7 +652,7 @@ export class ValidationService {
             });
         };
 
-        if(this.handleSubmit) form.addEventListener('submit', cb);
+        if (this.handleSubmit) form.addEventListener('submit', cb);
         form.addEventListener('reset', e => {
             let uids = this.formInputs[formUID];
 
@@ -686,6 +686,19 @@ export class ValidationService {
         let directives = this.parseDirectives(input.attributes);
         let validate = this.createValidator(input, directives);
 
+        // Get params of foolproof ("is") validators
+        var getFoolproofParams = directives => {
+            if (directives.is) {
+                return directives.is.params
+            }
+        };
+
+        var foolproofParams = getFoolproofParams(directives);
+        // Get dependentProp (the field that this one is being compared to) if it exists 
+        var dependentPropId = foolproofParams ? foolproofParams.dependentproperty : undefined;
+        var dependentEl = document.getElementById(dependentPropId) as HTMLInputElement;
+        //console.log(dependentEl);
+
         this.validators[uid] = validate;
         if (input.form) {
             this.trackFormInput(input.form, uid);
@@ -707,6 +720,16 @@ export class ValidationService {
             input.addEventListener('change', cb);
         } else {
             input.addEventListener('input', cb);
+        }
+
+        // Add additional event listener if element has a dependent element
+        if (dependentEl) {
+            let isDropdown = dependentEl.tagName.toLowerCase() === 'select';
+            if (isDropdown) {
+                dependentEl.addEventListener('change', cb);
+            } else {
+                dependentEl.addEventListener('input', cb);
+            }
         }
 
         this.elementEvents[uid] = cb;
@@ -767,11 +790,11 @@ export class ValidationService {
             e.innerHTML = this.validationSummaryMessages[i];
             if (ul) {
                 e.className = 'validation-summary validation-summary-errors';
-                if(summaryContainer)summaryContainer.classList.remove("hidden");
+                if (summaryContainer) summaryContainer.classList.remove("hidden");
                 e.appendChild(ul.cloneNode(true));
             } else {
                 e.className = 'validation-summary validation-summary-valid';
-                if(summaryContainer)summaryContainer.classList.add("hidden");
+                if (summaryContainer) summaryContainer.classList.add("hidden");
             }
         }
     }

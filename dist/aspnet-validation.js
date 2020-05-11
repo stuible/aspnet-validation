@@ -689,6 +689,17 @@ var ValidationService = /** @class */ (function () {
         var uid = this.getElementUID(input);
         var directives = this.parseDirectives(input.attributes);
         var validate = this.createValidator(input, directives);
+        // Get params of foolproof ("is") validators
+        var getFoolproofParams = function (directives) {
+            if (directives.is) {
+                return directives.is.params;
+            }
+        };
+        var foolproofParams = getFoolproofParams(directives);
+        // Get dependentProp (the field that this one is being compared to) if it exists 
+        var dependentPropId = foolproofParams ? foolproofParams.dependentproperty : undefined;
+        var dependentEl = document.getElementById(dependentPropId);
+        //console.log(dependentEl);
         this.validators[uid] = validate;
         if (input.form) {
             this.trackFormInput(input.form, uid);
@@ -708,6 +719,16 @@ var ValidationService = /** @class */ (function () {
         }
         else {
             input.addEventListener('input', cb);
+        }
+        // Add additional event listener if element has a dependent element
+        if (dependentEl) {
+            var isDropdown_1 = dependentEl.tagName.toLowerCase() === 'select';
+            if (isDropdown_1) {
+                dependentEl.addEventListener('change', cb);
+            }
+            else {
+                dependentEl.addEventListener('input', cb);
+            }
         }
         this.elementEvents[uid] = cb;
     };
